@@ -40,3 +40,28 @@ Instead of losing my mind over timeouts, I decided to bypass the dongle by using
 * **Board:** [Waveshare ESP32-S3-ETH](https://www.waveshare.com/wiki/ESP32-S3-ETH)
 * **Power:** PoE (Power over Ethernet)
 * **Protocol:** Modbus TCP Bridge (Port 502 LAN -> Port 6607 WiFi)
+
+---
+
+## Configuration [ITA] / [ENG]
+
+`huawei_solar_bridge.ino` è un unico sorgente generico: per ogni inverter, modifica i valori in cima al file prima di compilare e flashare (uno per board — Master e Slave usano lo stesso codice con parametri diversi).
+
+`huawei_solar_bridge.ino` is a single generic source: for each inverter, edit the values at the top of the file before compiling and flashing (one per board — Master and Slave run the same code with different parameters).
+
+| Variable | Description |
+|---|---|
+| `ip`, `gateway`, `subnet`, `dns` | Static IP for the ESP on your wired LAN |
+| `mac` | Must be **unique per board** on the same LAN |
+| `inv_ssid`, `inv_pass` | The inverter's own WiFi AP credentials (printed on the inverter/dongle label) |
+| `ota_hostname`, `ota_password` | Used for OTA updates (see below) — change `ota_password` before deploying |
+
+---
+
+## v1.1 — Reliability & OTA update
+
+* **WiFi auto-reconnect:** if the connection to the inverter's WiFi drops, the bridge retries every 10s instead of requiring a manual power cycle.
+* **Watchdog:** a 30s hardware watchdog (`esp_task_wdt`) auto-reboots the board if the firmware ever hangs.
+* **OTA updates:** `ArduinoOTA` is enabled — after the first USB flash, you can push firmware updates over the LAN (`arduino-cli upload --fqbn esp32:esp32:esp32s3 -p <hostname>.local`) without unplugging the board from wherever it's mounted.
+
+*[ITA]* — Riconnessione WiFi automatica ogni 10s in caso di caduta del segnale, watchdog hardware da 30s che riavvia il device se il firmware si blocca, e aggiornamenti OTA via LAN dopo il primo flash via USB.
