@@ -1,5 +1,11 @@
 # Huawei Solar Modbus Bridge (ESP32-S3-ETH)
 
+> ⚠️ **Compatibility warning / Avviso di compatibilità**
+>
+> **[ENG]** This bridge connects directly to the inverter's built-in WiFi AP on port 6607, sending plain Modbus TCP. This works on older Huawei SUN2000 models (e.g. non-hybrid L1/M1 series). **It does NOT work on newer hybrid MAP0-series inverters** — per Huawei's own SUN2000 MAP0 user manual (Appendix G), local Modbus-TCP on that port requires a TLS handshake authenticated with a proprietary "app communication certificate", which a generic client (this bridge, or any DIY Modbus client) cannot complete. On MAP0 inverters, use an official Huawei SDongle instead (it handles the TLS/certificate authentication and re-exposes plain Modbus TCP on your LAN once its "Modbus TCP service" is enabled).
+>
+> **[ITA]** Questo bridge si collega direttamente alla WiFi interna dell'inverter sulla porta 6607, inviando Modbus TCP in chiaro. Funziona sui modelli Huawei SUN2000 più vecchi (es. serie L1/M1 non ibride). **Non funziona sugli inverter ibridi serie MAP0 più recenti** — secondo il manuale utente Huawei SUN2000 MAP0 (Appendice G), la Modbus-TCP locale su quella porta richiede un handshake TLS autenticato con un certificato applicativo proprietario, che un client generico (questo bridge, o qualsiasi client Modbus fatto in casa) non può completare. Sugli inverter MAP0, usa invece un SDongle ufficiale Huawei (gestisce lui l'autenticazione TLS/certificato e riespone Modbus TCP in chiaro sulla tua LAN una volta attivato il "Modbus TCP service").
+
 ### [ITA] Il Problema: Il maledetto Dongle LAN e i Timeout
 Se sei qui, probabilmente hai un impianto Huawei con due inverter in **daisy chain** e stai cercando di leggere i dati tramite l'integrazione [Huawei Solar di wlcrs](https://github.com/wlcrs/huawei_solar). 
 
